@@ -23,6 +23,8 @@ export default function Home() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.wenepal.com/api';
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -30,7 +32,7 @@ export default function Home() {
     setResponse(null);
 
     try {
-      const res = await fetch("https://api.wenepal.com/api/save-form-data", {
+      const res = await fetch(`${API_URL}/save-form-data`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -40,11 +42,11 @@ export default function Home() {
       });
       const data = await res.json();
       if (res.ok) {
-        setResponse(data); // Use server-generated userId
+        setResponse(data);
       } else {
         setError(data.error || "Failed to save data");
       }
-    } catch (err) {
+    } catch {
       setError("Network error: Unable to save data");
     } finally {
       setLoading(false);
@@ -57,14 +59,14 @@ export default function Home() {
     setResponse(null);
 
     try {
-      const res = await fetch(`https://api.wenepal.com/api/get-form-data/${fetchUserId}`);
+      const res = await fetch(`${API_URL}/get-form-data/${fetchUserId}`);
       const data = await res.json();
       if (res.ok) {
         setResponse(data);
       } else {
         setError(data.error || "Failed to fetch data");
       }
-    } catch (err) {
+    } catch {
       setError("Network error: Unable to fetch data");
     } finally {
       setLoading(false);

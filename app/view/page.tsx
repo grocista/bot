@@ -50,6 +50,8 @@ export default function ViewUsers() {
     autoClick: true, autoFill: true, targetForm: "vfs-global-form", submitForm: false, delayMs: 1000, scrollToElement: true
   });
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.wenepal.com/api';
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -58,7 +60,7 @@ export default function ViewUsers() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("https://api.wenepal.com/api/get-all-form-data");
+      const res = await fetch(`${API_URL}/get-all-form-data`);
       const data = await res.json();
       if (res.ok) {
         setUsers(data);
@@ -66,7 +68,7 @@ export default function ViewUsers() {
       } else {
         setError(data.error || "Failed to fetch users");
       }
-    } catch (err) {
+    } catch {
       setError("Network error: Unable to fetch users");
     } finally {
       setLoading(false);
@@ -117,7 +119,7 @@ export default function ViewUsers() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`https://api.wenepal.com/api/update-form-data/${editingUser?.userId}`, {
+      const res = await fetch(`${API_URL}/update-form-data/${editingUser?.userId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -133,7 +135,7 @@ export default function ViewUsers() {
       } else {
         setError(data.error || "Failed to update user");
       }
-    } catch (err) {
+    } catch {
       setError("Network error: Unable to update user");
     } finally {
       setLoading(false);
@@ -145,7 +147,7 @@ export default function ViewUsers() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`https://api.wenepal.com/api/delete-form-data/${userId}`, {
+      const res = await fetch(`${API_URL}/delete-form-data/${userId}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
@@ -156,7 +158,7 @@ export default function ViewUsers() {
       } else {
         setError(data.error || "Failed to delete user");
       }
-    } catch (err) {
+    } catch {
       setError("Network error: Unable to delete user");
     } finally {
       setLoading(false);
